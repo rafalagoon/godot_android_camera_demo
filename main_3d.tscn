@@ -1,0 +1,113 @@
+[gd_scene load_steps=8 format=3 uid="uid://6eenqtui5fnq"]
+
+[ext_resource type="Script" path="res://main_3d.gd" id="1_d01f1"]
+
+[sub_resource type="Environment" id="Environment_wfngo"]
+background_mode = 1
+background_color = Color(0.0235294, 0.0235294, 0.0235294, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4oaoe"]
+uv1_offset = Vector3(0.5, -0.5, -0.5)
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_le5bw"]
+material = SubResource("StandardMaterial3D_4oaoe")
+
+[sub_resource type="Animation" id="Animation_vy41d"]
+resource_name = "Floating"
+length = 30.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Head:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 8, 20, 30),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -0.75, 0), Vector3(0, 1, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Head:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 6.8, 23.1, 30),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.124075, 0.0654988, 0.12944), Vector3(0.0296642, 0.0396312, -0.0758471), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_lb4wt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Head:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Head:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_adel7"]
+_data = {
+"Floating": SubResource("Animation_vy41d"),
+"RESET": SubResource("Animation_lb4wt")
+}
+
+[node name="Main3D" type="Node3D"]
+script = ExtResource("1_d01f1")
+
+[node name="Camera" type="Button" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -110.5
+offset_top = 64.0
+offset_right = 110.5
+offset_bottom = 138.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 32
+text = "Cheesee!!"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_wfngo")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.974645, -0.19414, 0.111246, 0.124216, 0.882989, 0.452661, -0.186109, -0.427365, 0.884716, 0, 2.78981, 4.49549)
+
+[node name="Head" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_le5bw")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.884844, -0.142747, 0.443481, -0.0194975, 0.939724, 0.341378, -0.46548, -0.310713, 0.828725, 1.22191, 1.43271, 2.30391)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_adel7")
+}
+autoplay = "Floating"
+
+[connection signal="pressed" from="Camera" to="." method="_on_camera_pressed"]
